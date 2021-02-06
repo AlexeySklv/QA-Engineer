@@ -1,42 +1,39 @@
 public class Main {
     public static void main(String[] args) {
-        JumpRun[] members = {
-                new Human(7, 10000, "Дарина"),
-                new Human(6, 500, "Марина"),
-                new Cat(4, 30, "Пушок"),
-                new Cat(7, 40, "Запашок"),
-                new Robot(100, 0, 9440927),
-                new Robot(50,0,2443897)
+        String[][] arr = {
+                {"x", "1", "1", "1"}, {"2", "2", "2", "2"}, {"2", "2", "2", "2"}, {"3", "4", "5", "6"},
         };
 
-        Barrier[] barrier1 = {
-                new Track(50),
-                new Track(1000),
-                new Wall(2),
-                new Wall(5),
-        };
+        try {
+            System.out.println("Сумма значений - " + getSum(arr, 4));
+        } catch (MyArraySizeException e) {
+            System.out.println("Неверный формат ячейки.");
+        } catch (MyArrayDataException e) {
+            System.out.println("В ячейке " + e.getCoordinates() + " неверные данные");
+        }
+    }
 
-        for (JumpRun member : members) {
-            System.out.println("На поле выходит " + member + ", публика в восторге!");
-            boolean winner = true;
-            for (Barrier barrier : barrier1) {
-                System.out.println(member + " выходит на " + barrier);
-                if (barrier.toJump(member.getMaxJump()) ||
-                        barrier.toRun(member.getMaxRun())) {
-                    System.out.println("и проходит препятствие");
-                } else {
-                    winner = false;
-                    System.out.println("и отправляется домой");
-                    break;
+    public static int getSum(String[][] arr, int arraySize) throws MyArrayDataException, MyArraySizeException {
+        int result = 0;
+
+        if (arr.length != arraySize) {
+            throw new MyArraySizeException("Неверный размер массива", arr.length);
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].length != arraySize) {
+                throw new MyArraySizeException("Неверный размер массива", arr[i].length);
+            }
+
+            for (int j = 0; j < arr[i].length; ++j) {
+                try {
+                    result += Integer.parseInt(arr[i][j]);
+                } catch (NumberFormatException e) {
+                    throw new MyArrayDataException("Невозможно привести к цифровому значению", i, j);
                 }
             }
-
-            if(winner) {
-                System.out.println(member + " проходит все препятствия, это победа!");
-            } else {
-                System.out.println(member + " проигрывает");
-            }
-            System.out.println();
         }
+
+        return result;
     }
 }
