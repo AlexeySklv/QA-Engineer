@@ -1,0 +1,3 @@
+class Fruit {
+    float weigth;
+}
